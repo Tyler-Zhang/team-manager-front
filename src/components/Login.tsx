@@ -2,15 +2,17 @@ import * as React from 'react'
 import * as qs from 'qs'
 import { TextField, RaisedButton } from 'material-ui'
 import { API_LOGIN_ENDPOINT } from '../constants/const'
+import { withRouter, RouteComponentProps } from 'react-router'
 
-interface LoginProps {}
+interface LoginProps extends RouteComponentProps<{}> {}
 
 interface LoginState {
     email: string,
     password: string
 }
 
-class Login extends React.Component<LoginProps, LoginState> {
+@withRouter
+class Login extends React.Component<LoginProps, LoginState > {
 
     constructor(props: LoginProps) {
         super(props)
@@ -18,10 +20,9 @@ class Login extends React.Component<LoginProps, LoginState> {
             email: '',
             password: ''
         }
-        this.handleLogin = this.handleLogin.bind(this)
     }
 
-    async handleLogin() {
+    handleLogin = async () => {
         const data = {email: this.state.email, password: this.state.password}
         
         const response = await fetch(API_LOGIN_ENDPOINT, { 
@@ -34,6 +35,7 @@ class Login extends React.Component<LoginProps, LoginState> {
         })
         if (response.status === 200) { 
             console.log('success')
+            this.props.history.push('/dashboard')
         } else {
             console.log('failed')
         }
@@ -59,6 +61,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                     />
                 </div>
                 <div>
+
                     <RaisedButton
                         onClick={this.handleLogin}
                         primary={true}

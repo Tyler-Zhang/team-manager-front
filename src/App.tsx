@@ -4,6 +4,8 @@ import { Route } from 'react-router'
 import { ConnectedRouter } from 'react-router-redux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Login from './components/Login'
+import Dashboard from './components/Dashboard'
+import Signup from './components/Signup'
 
 import './App.css';
 import store, { history } from './redux'
@@ -14,7 +16,11 @@ class App extends React.Component {
       <Provider store={store}>
         <MuiThemeProvider>
           <ConnectedRouter history={history}>
-            <Route path="/login" component={Login}/>
+            <div>
+              <Route path="/login" component={Login}/>
+              <Route path="/dashboard" component={Dashboard}/>
+              <Route path="/signup" component={Signup}/>
+            </div>
           </ConnectedRouter>
         </MuiThemeProvider>
       </Provider>
