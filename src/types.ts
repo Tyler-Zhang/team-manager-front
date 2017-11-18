@@ -31,10 +31,19 @@ export interface PaginatedObjectsStore {
   order: string
 }
 
+export interface SessionStore {
+  id: number
+}
+
 export interface UsersStore extends PaginatedObjectsStore {
   users: User[]
 }
 
 export interface Store {
-  users: UsersStore
+  users: UsersStore,
+  session: SessionStore
+}
+
+export interface LoginResponse {
+  message?: String
 }
