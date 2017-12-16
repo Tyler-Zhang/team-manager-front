@@ -1,31 +1,25 @@
-import * as React from 'react';
-import { Provider } from 'react-redux';
-import { Route } from 'react-router'
-import { ConnectedRouter } from 'react-router-redux'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import * as React from 'react'
+import { Provider } from 'react-redux'
+import { Switch, Route } from 'react-router'
+import { ConnectedRouter } from 'react-router-redux';
 import Login from './components/Login'
-import Dashboard from './components/Dashboard'
-import Signup from './components/Signup'
 
-import './App.css';
-import store, { history } from './redux'
+// import Dashboard from './components/Dashboard'
+// import Signup from './components/Signup'
 
-class App extends React.Component {
-  render() {
+import './App.css'
+import { store, history } from './store'
+
+export default class App extends React.PureComponent {
+  render () {
     return (
       <Provider store={store}>
-        <MuiThemeProvider>
-          <ConnectedRouter history={history}>
-            <div>
-              <Route path="/login" component={Login}/>
-              <Route path="/dashboard" component={Dashboard}/>
-              <Route path="/signup" component={Signup}/>
-            </div>
-          </ConnectedRouter>
-        </MuiThemeProvider>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/login" exact={true} component={Login} />
+          </Switch>
+        </ConnectedRouter>
       </Provider>
-    );
+    )
   }
 }
-
-export default App;

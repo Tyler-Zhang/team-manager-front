@@ -4,18 +4,20 @@ import ReduxThunk from 'redux-thunk'
 import createHistory from 'history/createBrowserHistory'
 
 // Reducers
-import users from './users'
+import teams, { TeamStore } from './teams'
 
 export const history = createHistory()
 
-const reducer = combineReducers({
-  users,
+export interface RootStore {
+  teams: TeamStore
+}
+
+const reducer = combineReducers<RootStore>({
+  teams,
   routing: routerReducer
 })
 
-const store = createStore(
+export const store = createStore<RootStore>(
   reducer,
   applyMiddleware(ReduxThunk, routerMiddleware(history))
 )
-
-export default store

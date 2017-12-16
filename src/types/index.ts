@@ -19,9 +19,10 @@ export interface User {
 }
 
 export enum LoadState {
+  beforeLoad,
   loading,
-  error, 
-  completed
+  loaded,
+  reloading
 }
 
 export interface PaginatedObjectsStore {
@@ -46,4 +47,9 @@ export interface Store {
 
 export interface LoginResponse {
   message?: String
+}
+
+export interface ReduxAction {
+  type: string,
+  [key: string]: any
 }
