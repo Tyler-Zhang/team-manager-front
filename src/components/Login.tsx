@@ -1,12 +1,11 @@
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router'
 import { Flex } from 'reflexbox'
 import { Form, Icon, Input, Button } from 'antd'
 import { API_LOGIN_ENDPOINT } from '../constants/api'
 import axios from '../utils/axios'
 import { FormComponentProps } from 'antd/lib/form/Form';
 
-interface LoginProps extends RouteComponentProps<{}>, FormComponentProps { }
+interface LoginProps extends FormComponentProps { }
 
 interface LoginState {
   email: string,
@@ -14,10 +13,12 @@ interface LoginState {
 }
 
 class Login extends React.Component<LoginProps, LoginState> {
-  async onSubmit (data: any) {
-    console.log(data)
+  onSubmit = (e: any) => {
+    e.preventDefault()
 
-    await axios.post(API_LOGIN_ENDPOINT, data)
+    this.props.form.validateFields((err, values) => {
+      axios.post(API_LOGIN_ENDPOINT, values)
+    })
   }
 
   render () {
