@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/moment": "^2.13.0",
     "@types/react-router-dom": "^4.2.3",
     "antd": "^3.0.1",
     "axios": "^0.17.1",
+    "moment": "^2.20.0",
     "react": "^16.2.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-app-rewire-less": "^2.1.0",

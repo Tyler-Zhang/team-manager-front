@@ -5,15 +5,18 @@ import createHistory from 'history/createBrowserHistory'
 
 // Reducers
 import teams, { TeamStore } from './teams'
+import users, { UserStore } from './users'
 
 export const history = createHistory()
 
 export interface RootStore {
-  teams: TeamStore
+  teams: TeamStore,
+  users: UserStore
 }
 
 const reducer = combineReducers<RootStore>({
   teams,
+  users,
   routing: routerReducer
 })
 

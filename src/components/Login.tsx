@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Flex } from 'reflexbox'
 import { Form, Icon, Input, Button } from 'antd'
-import { API_LOGIN_ENDPOINT } from '../constants/api'
+import { API_LOGIN } from '../constants/api'
 import axios from '../utils/axios'
 import { FormComponentProps } from 'antd/lib/form/Form';
 
@@ -17,7 +17,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     e.preventDefault()
 
     this.props.form.validateFields((err, values) => {
-      axios.post(API_LOGIN_ENDPOINT, values)
+      axios.post(API_LOGIN, values)
     })
   }
 

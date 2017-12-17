@@ -4,8 +4,8 @@ import { Switch, Route } from 'react-router-dom'
 import { ConnectedRouter } from 'react-router-redux';
 import Login from './components/Login'
 
-import Dashboard from './components/Dashboard'
 import Navigation from './components/Navigation'
+import { UsersPage } from './components/Users'
 // import Signup from './components/Signup'
 
 import './App.css'
@@ -20,7 +20,7 @@ export default class App extends React.PureComponent {
             <Route path="/login" exact={true} component={Login} />
             <Navigation>
               <Switch>
-                <Route path="/" exact={true} component={Dashboard} />
+                <Route path="/users" exact={true} component={UsersPage} />
               </Switch>
             </Navigation>
           </Switch>

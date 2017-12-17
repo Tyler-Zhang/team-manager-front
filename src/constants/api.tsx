@@ -1,3 +1,5 @@
 export const API_URL = 'http://localhost:9000'
-export const API_LOGIN_ENDPOINT = '/api/users/login'   
-export const API_SIGNUP_ENDPOINT = '/api/users/signup'   
+export const API_LOGIN = '/api/users/login'   
+export const API_SIGNUP = '/api/users/signup'   
+export const API_GET_USERS = '/api/users'
+export const API_DELETE_POSITION = '/api/positions/'
