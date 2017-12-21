@@ -11,6 +11,7 @@ import PositionCell from './PositionCell'
 
 interface UsersTableProps {
   users: any[]
+  teams: any[]
   loadState: LoadState,
   loadUsers: typeof loadUsers
 }
@@ -23,35 +24,36 @@ export class UsersTable extends React.Component<UsersTableProps, {}> {
 
     this.columns = [{
       title: 'Name',
-      key: 'id',
+      key: 'name',
       render: (text: string, source: any) => `${source.firstName} ${source.lastName}`
     }, {
       title: 'Authority',
-      key: 'id',
+      key: 'authority',
       dataIndex: 'authority'
     }, {
       title: 'Email',
-      key: 'id',
+      key: 'email',
       dataIndex: 'email'
     }, {
       title: 'Joined',
-      key: 'id',
+      key: 'joined',
       render: (text: string) => moment(text).format('MMM Do, YYYY')
     }, {
       title: 'Positions',
-      key: 'id',
+      key: 'positions',
       render: (text: string, source: any) => (
         <PositionCell 
-          positions={source.positions} 
+          positions={source.positions}
+          teams={this.props.teams}
           onChange={this.props.loadUsers}
+          onAddTeam={this.onAddTeam(source.id)}
         />
       )
     }]
-
   }
 
-  componentDidMount () {
-    this.props.loadUsers()
+  onAddTeam = (userId: number) => (teamId: number) => {
+    
   }
   
   render () {
@@ -63,6 +65,7 @@ export class UsersTable extends React.Component<UsersTableProps, {}> {
 
 const mapStateToProps = (state: RootStore) => ({
   users: state.users.users,
+  teams: state.teams.teams,
   loadState: state.users.loadState
 })
 

@@ -19,7 +19,13 @@ interface PositionCellProps {
     userId: number
   }[]
 
+  teams: {
+    name: string
+    id: number
+  }[]
+
   onChange: Function
+  onAddTeam: Function
 }
 
 export default class PositionCell extends React.Component<PositionCellProps, {}> {
@@ -37,7 +43,7 @@ export default class PositionCell extends React.Component<PositionCellProps, {}>
     }
   }
 
-  renderTags = () => {
+  renderPositionTags = () => {
     return this.props.positions.map(position => (
       <Popconfirm
         placement="top" 
@@ -59,7 +65,11 @@ export default class PositionCell extends React.Component<PositionCellProps, {}>
 render () {
     return (
       <div>
-        {this.renderTags()}
+        <Tag
+          color="green"
+        > <a onClick={this.props.onAddTeam as any}> Add Team </a>
+        </Tag>
+        {this.renderPositionTags()}
       </div>
     )
   }
