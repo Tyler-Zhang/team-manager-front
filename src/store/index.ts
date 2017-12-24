@@ -4,8 +4,8 @@ import ReduxThunk from 'redux-thunk'
 import createHistory from 'history/createBrowserHistory'
 
 // Reducers
-import teams, { TeamStore, loadTeams } from './teams'
-import users, { UserStore, loadUsers } from './users'
+import teams, { TeamStore, loadTeams, loadTeamPreview } from './teams'
+import users, { UserStore, loadUsers, loadUserPreview } from './users'
 
 export const history = createHistory()
 
@@ -26,8 +26,8 @@ export const store = createStore<RootStore>(
 )
 
 export function init (s: typeof store) {
-  s.dispatch(loadTeams())
-  s.dispatch(loadUsers())
+  s.dispatch(loadTeamPreview())
+  s.dispatch(loadUserPreview())
 }
 
 init(store)

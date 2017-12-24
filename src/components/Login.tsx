@@ -1,11 +1,12 @@
 import * as React from 'react'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { Flex } from 'reflexbox'
 import { Form, Icon, Input, Button } from 'antd'
 import { API_LOGIN } from '../constants/api'
 import axios from '../utils/axios'
 import { FormComponentProps } from 'antd/lib/form/Form';
 
-interface LoginProps extends FormComponentProps { }
+interface LoginProps extends FormComponentProps, RouteComponentProps<{}> { }
 
 interface LoginState {
   email: string,
@@ -16,8 +17,9 @@ class Login extends React.Component<LoginProps, LoginState> {
   onSubmit = (e: any) => {
     e.preventDefault()
 
-    this.props.form.validateFields((err, values) => {
-      axios.post(API_LOGIN, values)
+    this.props.form.validateFields(async (err, values) => {
+      await axios.post(API_LOGIN, values)
+      this.props.history.push('/users')
     })
   }
 
@@ -57,4 +59,4 @@ class Login extends React.Component<LoginProps, LoginState> {
   }
 }
 
-export default Form.create()(Login)
+export default withRouter(Form.create()(Login))

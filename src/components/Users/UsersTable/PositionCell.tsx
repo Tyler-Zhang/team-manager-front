@@ -1,53 +1,44 @@
 import * as React from 'react'
-import { Tag, Popconfirm } from 'antd'
-import { API_DELETE_POSITION } from '../../../constants/api'
-import axios from '../../../utils/axios'
+import { Tag, Popconfirm, Popover, AutoComplete, Radio, Button, Icon } from 'antd'
+import { Position, TeamPreview, PositionLevel } from '../../../types'
+import { Flex } from 'reflexbox'
 
 interface PositionCellProps {
-  positions: {
-    level: 'member' | 'coLead' | 'lead'
-    createDate: string
-    id: number
-    team: {
-      createDate: string
-      id: number
-      name: string
-      updateDate: string
-    }
-    teamId: number
-    updateDate: string
-    userId: number
-  }[]
-
-  teams: {
-    name: string
-    id: number
-  }[]
-
-  onChange: Function
-  onAddTeam: Function
+  positions: Position[]
+  teams: TeamPreview[]
+  onRemovePosition: (positionId: number) => any
+  onAddPosition: (teamId: number, level: PositionLevel) => any
 }
 
-export default class PositionCell extends React.Component<PositionCellProps, {}> {
-  onCloseTag = (positionId: number) => async () => {
-    const response = await axios.delete(API_DELETE_POSITION + positionId)
-    this.props.onChange()
+interface PositionCellState {
+  teamId: number | null,
+  level: PositionLevel,
+  popoverVisible: boolean
+}
+
+export default class PositionCell extends React.Component<PositionCellProps, PositionCellState> {
+
+  state = {
+    teamId: null,
+    level: PositionLevel.member,
+    popoverVisible: false
   }
 
-  getTagColorFromLevel = (level: 'member' | 'coLead' | 'lead') => {
+  getTagColorFromLevel (level: PositionLevel) {
     switch (level) {
-      case 'member': return ''
-      case 'coLead': return 'blue'
-      case 'lead': return 'gold'
+      case PositionLevel.member: return ''
+      case PositionLevel.coLead: return 'blue'
+      case PositionLevel.lead: return 'gold'
       default: return ''
     }
   }
 
-  renderPositionTags = () => {
+  renderPositionTags() {
     return this.props.positions.map(position => (
       <Popconfirm
+        key={position.id}
         placement="top" 
-        onConfirm={this.onCloseTag(position.id)} 
+        onConfirm={() => this.props.onRemovePosition(position.id)} 
         okText="Yes" 
         cancelText="no"
         title="Remove from team?"
@@ -57,20 +48,98 @@ export default class PositionCell extends React.Component<PositionCellProps, {}>
           onClose={(e: Event) => e.preventDefault()}
           color={this.getTagColorFromLevel(position.level)}
         > {position.team.name}
+          {position.level !== PositionLevel.member ? ` (${position.level})` : ''}
         </Tag >
       </Popconfirm>
     ))
   }
 
-render () {
+  addPosition = () => {
+    const { level, teamId } = this.state
+
+    if (!level || !teamId) { return }
+
+    this.props.onAddPosition(teamId, level)
+    this.setState({ popoverVisible: false })
+  }
+
+  renderAddTeamPopoverContent () {
+    const teamDataSource = this.props.teams.map(v => ({
+      text: v.name,
+      value: v.id as any
+    }))
+
+    const filterOption = (inputValue: string, option: any) => (
+      (option.props.children as string).indexOf(inputValue) !== -1
+    )
+
     return (
       <div>
-        <Tag
-          color="green"
-        > <a onClick={this.props.onAddTeam as any}> Add Team </a>
-        </Tag>
-        {this.renderPositionTags()}
+        <AutoComplete
+          dataSource={teamDataSource}
+          filterOption={filterOption}
+          onSelect={(value: any) => this.setState({ teamId: value })}
+
+        />
+        <br />
+        <br />
+        <Radio.Group 
+          onChange={(event) => this.setState({ level: event.target.value as any })}
+          value={this.state.level}
+        >
+          {
+            Object.keys(PositionLevel).map(level => (
+              <Radio.Button 
+                value={level}
+                key={level}
+              >{level}
+              </Radio.Button>
+            ))
+          }
+        </Radio.Group>
+
+        <br/>
+        <br/>
+        <Flex justify="space-between">
+          <Button
+            size="small"
+            icon="check"
+            type="primary"
+            onClick={this.addPosition}
+          />
+          <Button
+            size="small"
+            icon="close"
+            type="danger"
+            onClick={this.addPosition}
+          />
+        </Flex>
       </div>
+    )
+  }
+
+render () {
+    return (
+      <Flex wrap={true}>
+        <Popover 
+          trigger="click" 
+          content={this.renderAddTeamPopoverContent()}
+          title="Add Team to User"
+          visible={this.state.popoverVisible}
+        >
+          <Tag
+            color="green"
+          >
+          <a 
+            onClick={() => this.setState({ popoverVisible: true })}
+          > 
+            <Icon type="plus"/>
+            Add Team
+          </a>
+          </Tag>
+        </Popover>
+        {this.renderPositionTags()}
+      </Flex>
     )
   }
 }

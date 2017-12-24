@@ -3,15 +3,17 @@ import { bindActionCreators, ActionCreator } from 'redux';
 import { connect } from 'react-redux';
 import { Table, Icon, Divider } from 'antd'
 import * as moment from 'moment'
+import axios from '../../../utils/axios'
 import { loadUsers } from '../../../store/users'
 import { RootStore } from '../../../store'
-import { LoadState } from '../../../types';
+import { LoadState, User, TeamPreview, PositionLevel } from '../../../types';
 
 import PositionCell from './PositionCell'
+import { API_DELETE_POSITION, API_POST_POSITION } from '../../../constants/api';
 
 interface UsersTableProps {
-  users: any[]
-  teams: any[]
+  users: User[]
+  teamsPreview: TeamPreview[]
   loadState: LoadState,
   loadUsers: typeof loadUsers
 }
@@ -41,19 +43,25 @@ export class UsersTable extends React.Component<UsersTableProps, {}> {
     }, {
       title: 'Positions',
       key: 'positions',
-      render: (text: string, source: any) => (
+      render: (text: string, user: User) => (
         <PositionCell 
-          positions={source.positions}
-          teams={this.props.teams}
-          onChange={this.props.loadUsers}
-          onAddTeam={this.onAddTeam(source.id)}
+          positions={user.positions}
+          teams={this.props.teamsPreview}
+          onRemovePosition={this.onRemovePosition}
+          onAddPosition={this.onAddTeam(user.id)}
         />
       )
     }]
   }
 
-  onAddTeam = (userId: number) => (teamId: number) => {
-    
+  onAddTeam = (userId: number) => async (teamId: number, level: PositionLevel) => {
+    await axios.post(API_POST_POSITION, { userId, teamId, level })
+    this.props.loadUsers()
+  }
+
+  onRemovePosition = async (positionId: number) => {
+    await axios.delete(`${API_DELETE_POSITION}/${positionId}`)
+    this.props.loadUsers()
   }
   
   render () {
@@ -65,7 +73,7 @@ export class UsersTable extends React.Component<UsersTableProps, {}> {
 
 const mapStateToProps = (state: RootStore) => ({
   users: state.users.users,
-  teams: state.teams.teams,
+  teamsPreview: state.teams.preview,
   loadState: state.users.loadState
 })
 

@@ -5,7 +5,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import Login from './components/Login'
 
 import Navigation from './components/Navigation'
-import { UsersPage } from './components/Users'
+import UsersPage from './components/Users'
 // import Signup from './components/Signup'
 
 import './App.css'

@@ -1,22 +1,4 @@
-export interface Team {
-  id: number
-  name: string
-}
-
-export interface Position {
-  level: number | string
-  team?: Team
-  user?: User
-}
-
-export interface User {
-  id: number
-  firstName: string
-  lastName: string
-  email: string
-  createdAt: Date
-  positions: Position[]
-}
+export * from './api'
 
 export enum LoadState {
   beforeLoad,
@@ -34,15 +16,6 @@ export interface PaginatedObjectsStore {
 
 export interface SessionStore {
   id: number
-}
-
-export interface UsersStore extends PaginatedObjectsStore {
-  users: User[]
-}
-
-export interface Store {
-  users: UsersStore,
-  session: SessionStore
 }
 
 export interface LoginResponse {
