@@ -111,7 +111,7 @@ export default class PositionCell extends React.Component<PositionCellProps, Pos
             size="small"
             icon="close"
             type="danger"
-            onClick={this.addPosition}
+            onClick={() => this.setState({ popoverVisible: false })}
           />
         </Flex>
       </div>

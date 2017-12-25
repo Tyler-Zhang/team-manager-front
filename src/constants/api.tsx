@@ -1,6 +1,7 @@
 export const API_URL = 'http://localhost:9000'
 export const API_LOGIN = '/api/users/login'   
 export const API_SIGNUP = '/api/users/signup'   
+export const API_POST_USERS = '/api/users'
 export const API_GET_USERS = '/api/users'
 export const API_GET_USERS_PREVIEW = '/api/users/preview'
 export const API_GET_TEAMS = '/api/teams'

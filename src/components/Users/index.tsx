@@ -1,10 +1,13 @@
 import * as React from 'react'
 import { Layout, Row, Col } from 'antd'
 import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import UsersTable from './UsersTable'
-import { loadUsers } from '../../store/users'
 import { Dispatch } from 'redux';
+import { connect } from 'react-redux'
+import { loadUsers } from '../../store/users'
+
+import UsersTable from './UsersTable'
+import AddUserModal from './AddUserModal'
+import { Flex } from 'reflexbox';
 
 const { Header, Footer, Sider, Content } = Layout
 
@@ -21,7 +24,10 @@ class UsersPage extends React.Component<UsersPageProps, {}> {
     return (
       <div>
         <Header style={{ background: '#fff'}}>
-          <h3> Users Page </h3>
+          <Flex justify="space-between">
+            <h3> Users Page </h3>
+            <AddUserModal/>
+          </Flex>
         </Header>
         <Content>
           <UsersTable/>

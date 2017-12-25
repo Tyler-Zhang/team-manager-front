@@ -18,7 +18,7 @@ interface UsersTableProps {
   loadUsers: typeof loadUsers
 }
 
-export class UsersTable extends React.Component<UsersTableProps, {}> {
+class UsersTable extends React.Component<UsersTableProps, {}> {
   private columns: any[]
 
   constructor (props: UsersTableProps) {
