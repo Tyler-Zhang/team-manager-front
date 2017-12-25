@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Button, Form, Input, Row, Radio, message } from 'antd'
+import { Button, Form, Input, Row, Radio, message, Select } from 'antd'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import { API_POST_USERS } from '../../../constants/api'
 import axios from '../../../utils/axios'
-import { Authority } from '../../../types'
+import { Authority, TeamPreview } from '../../../types'
 
 const FormItem = Form.Item
 
@@ -18,10 +18,8 @@ const formItemLayout = {
   },
 }
 
-interface AddUserFormProps extends FormComponentProps {}
-
-interface AddUserFormState {
-  
+interface AddUserFormProps extends FormComponentProps {
+  teams: TeamPreview[]
 }
 
 class AddUserForm extends React.Component<AddUserFormProps , {}> {
@@ -33,6 +31,7 @@ class AddUserForm extends React.Component<AddUserFormProps , {}> {
       try {
         await axios.post(API_POST_USERS, values)
         message.success(`Created user for ${values.firstName} ${values.lastName}`)
+        this.props.form.resetFields()
         
       } catch (e) {
         message.error(`${e.message}: ${e.response.data.message}`, 10000)
@@ -102,6 +101,23 @@ class AddUserForm extends React.Component<AddUserFormProps , {}> {
                   ))
                 }
               </Radio.Group>
+            )
+          }
+        </FormItem>
+        <FormItem {...formItemLayout} label="Teams">
+          {
+            getFieldDecorator('teams')(
+              <Select
+                mode="multiple"
+                tokenSeparators={[',']}
+                filterOption={(input, option) => (option.props.children as string).indexOf(input) !== -1}
+              >
+                {
+                  this.props.teams.map(team => (
+                    <Select.Option key={team.id} value={team.id + ''}>{team.name}</Select.Option>
+                  ))
+                }
+              </Select>
             )
           }
         </FormItem>

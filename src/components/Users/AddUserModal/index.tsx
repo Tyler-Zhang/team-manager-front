@@ -3,14 +3,16 @@ import { bindActionCreators, ActionCreator } from 'redux';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'antd'
 import axios from '../../../utils/axios'
+import { RootStore } from '../../../store'
 import { loadUsers } from '../../../store/users'
-import { Authority } from '../../../types';
+import { Authority, TeamPreview } from '../../../types';
 import { API_POST_USERS } from '../../../constants/api';
 
 import AddUserForm from './AddUserForm'
 
 interface AddUserModalProps {
-  loadUsers: () => any
+  loadUsers: () => any,
+  teamsPreview: TeamPreview[]
 }
 
 interface AddUserModalState {
@@ -37,13 +39,17 @@ class AddUserModal extends React.Component<AddUserModalProps, AddUserModalState>
           onCancel={() => this.setState({ visible: false })}
         >
           <br/>
-          <AddUserForm />
+          <AddUserForm teams={this.props.teamsPreview}/>
         </Modal>
       </div>
     )
   }
 }
 
+const mapStateToProps = (state: RootStore) => ({
+  teamsPreview: state.teams.preview
+})
+
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({ loadUsers }, dispatch)
 
-export default connect(null, mapDispatchToProps)(AddUserModal)
+export default connect(mapStateToProps, mapDispatchToProps)(AddUserModal)
