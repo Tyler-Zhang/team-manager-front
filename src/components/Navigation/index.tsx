@@ -1,10 +1,19 @@
 import * as React from 'react'
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { connect, Dispatch } from 'react-redux'
+import { loadTeamPreview } from '../../store/teams'
+import { loadUserPreview } from '../../store/users'
+import { loadAccountInfo } from '../../store/account'
 import { Layout, Menu, Icon } from 'antd';
 
 const { Sider } = Layout
 
-interface NavigationProps extends RouteComponentProps<any> {}
+interface NavigationProps extends RouteComponentProps<{}> {
+  loadAccountInfo: () => void,
+  loadTeamPreview: () => void,
+  loadUserPreview: () => void
+}
 
 interface NavigationState {
   collapsed: boolean
@@ -13,6 +22,12 @@ interface NavigationState {
 class Navigation extends React.Component<NavigationProps, NavigationState> {
   state = {
     collapsed: false
+  }
+
+  componentDidMount () {
+    this.props.loadAccountInfo()
+    this.props.loadTeamPreview()
+    this.props.loadUserPreview()
   }
 
   onCollapse = (collapsed: boolean) => this.setState({ collapsed })
@@ -39,6 +54,12 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
               <span>Team</span>
             </Link>
           </Menu.Item>
+          <Menu.Item key="3">
+            <Link to="/connections">
+            <Icon type="link" />
+              <span>Connections</span>
+            </Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout>
@@ -48,5 +69,9 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
     )
   }
 }
+const mapDispatchToProps = (dispatch: Dispatch<{}>) => (
+  bindActionCreators({ loadAccountInfo, loadTeamPreview, loadUserPreview }, dispatch)
+)
 
-export default withRouter<NavigationProps>(Navigation)
+// Weird typescript error occuring with the as any
+export default withRouter(connect<NavigationProps>(null, mapDispatchToProps)(Navigation)) as any

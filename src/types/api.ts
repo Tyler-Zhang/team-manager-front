@@ -67,3 +67,14 @@ export interface Position extends BaseEntity {
   user: User
   team: Team
 }
+
+export interface UserInfo {
+  firstName: string
+  lastName: string
+  address: string
+  phoneNumber: string
+  email: string
+  authority: Authority
+  slackTag: string
+  googleAuth: boolean
+}

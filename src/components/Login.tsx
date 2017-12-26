@@ -2,9 +2,9 @@ import * as React from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { Flex } from 'reflexbox'
 import { Form, Icon, Input, Button } from 'antd'
+import { FormComponentProps } from 'antd/lib/form/Form';
 import { API_LOGIN } from '../constants/api'
 import axios from '../utils/axios'
-import { FormComponentProps } from 'antd/lib/form/Form';
 
 interface LoginProps extends FormComponentProps, RouteComponentProps<{}> { }
 
