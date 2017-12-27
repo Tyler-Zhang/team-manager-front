@@ -19,11 +19,8 @@ export function changeLoadState (state: LoadState) {
 export function loadUsers () {
   return async (dispatch: Dispatch<{}>) => {
     dispatch(changeLoadState(LoadState.loading))
-
     const response = await axios.get(API_GET_USERS)
-
     dispatch({ type: LOAD_USERS, users: response.data })
-    dispatch(changeLoadState(LoadState.loaded))
   }
 }
 
@@ -32,7 +29,6 @@ export function loadUserPreview () {
     dispatch (changeLoadState(LoadState.loading))
     const response = await axios.get(API_GET_USERS_PREVIEW)
     dispatch({ type: LOAD_USERS_PREVIEW, usersPreview: response.data })
-    dispatch(changeLoadState(LoadState.loaded))
   }
 }
 
@@ -54,9 +50,9 @@ export default (state: UserStore = defaultState, action: ReduxAction): UserStore
     case CHANGE_LOAD_STATE:
       return { ...state, loadState: action.state }
     case LOAD_USERS:
-      return { ...state, users: action.users }
+      return { ...state, users: action.users, loadState: LoadState.loaded }
     case LOAD_USERS_PREVIEW:
-      return { ...state, usersPreview: action.usersPreview }
+      return { ...state, usersPreview: action.usersPreview, loadState: LoadState.loaded }
     default: return state
   }
 }
