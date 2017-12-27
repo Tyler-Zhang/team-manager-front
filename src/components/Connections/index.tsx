@@ -4,14 +4,13 @@ import { bindActionCreators } from 'redux'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { RootStore } from '../../store'
-import { UserInfo, LoadState } from '../../types/index'
+import { UserInfo } from '../../types/index'
 import { API_REDIRECT_GOOGLE } from '../../constants/api'
 
 const { Header, Footer, Sider, Content } = Layout
 
 interface ConnectionPageProps {
-  account: UserInfo | null,
-  loadState: LoadState
+  account: UserInfo | null
 }
 
 class ConnectionPage extends React.Component<ConnectionPageProps, {}> {
@@ -64,8 +63,8 @@ class ConnectionPage extends React.Component<ConnectionPageProps, {}> {
                 <p>This page manages your connections to outside services</p>
               </Row>
               {
-                this.props.loadState !== LoadState.loaded ?
-                <Spin/>
+                this.props.account === null ?
+                <div><Spin/> Loading account info </div>
                 :
                 <Row>
                   {this.renderGoogleItem()}
@@ -81,8 +80,7 @@ class ConnectionPage extends React.Component<ConnectionPageProps, {}> {
 }
 
 const mapStateToProps = (state: RootStore) => ({
-  account:  state.account.info,
-  loadState: state.account.loadState
+  account:  state.account.info
 })
 
 export default connect(mapStateToProps, null)(ConnectionPage)

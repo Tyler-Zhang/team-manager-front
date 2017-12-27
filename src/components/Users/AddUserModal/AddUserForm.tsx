@@ -34,7 +34,7 @@ class AddUserForm extends React.Component<AddUserFormProps , {}> {
         this.props.form.resetFields()
         
       } catch (e) {
-        message.error(`${e.message}: ${e.response.data.message}`, 10000)
+        message.error(`${e.message}: ${e.response.data.message}`, 3)
       }
 
     })

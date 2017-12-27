@@ -6,7 +6,7 @@ import * as moment from 'moment'
 import axios from '../../../utils/axios'
 import { loadUsers } from '../../../store/users'
 import { RootStore } from '../../../store'
-import { LoadState, User, TeamPreview, PositionLevel } from '../../../types';
+import { User, TeamPreview, PositionLevel } from '../../../types';
 
 import PositionCell from './PositionCell'
 import { API_DELETE_POSITION, API_POST_POSITION } from '../../../constants/api';
@@ -14,7 +14,6 @@ import { API_DELETE_POSITION, API_POST_POSITION } from '../../../constants/api';
 interface UsersTableProps {
   users: User[]
   teamsPreview: TeamPreview[]
-  loadState: LoadState,
   loadUsers: typeof loadUsers
 }
 
@@ -73,8 +72,7 @@ class UsersTable extends React.Component<UsersTableProps, {}> {
 
 const mapStateToProps = (state: RootStore) => ({
   users: state.users.users,
-  teamsPreview: state.teams.preview,
-  loadState: state.users.loadState
+  teamsPreview: state.teams.preview
 })
 
 const mapDispatchToProps = (dispatch: any) => bindActionCreators({ loadUsers }, dispatch)

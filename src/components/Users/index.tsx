@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Layout, Row, Col } from 'antd'
+import { Layout, Button } from 'antd'
 import { bindActionCreators } from 'redux'
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux'
@@ -26,7 +26,11 @@ class UsersPage extends React.Component<UsersPageProps, {}> {
         <Header style={{ background: '#fff'}}>
           <Flex justify="space-between">
             <h3> Users Page </h3>
-            <AddUserModal/>
+            <Flex align="center" justify="space-between">
+              <Button type="dashed" icon="reload" onClick={this.props.loadUsers}/>
+              <div style={{width: 10}}/>
+              <AddUserModal/>
+            </Flex>
           </Flex>
         </Header>
         <Content>

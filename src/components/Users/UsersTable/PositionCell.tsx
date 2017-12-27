@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { Tag, Popconfirm, Popover, AutoComplete, Radio, Button, Icon } from 'antd'
+import { Tag, Popconfirm, Popover, AutoComplete, Radio, Button, Icon, Spin } from 'antd'
 import { Position, TeamPreview, PositionLevel } from '../../../types'
 import { Flex } from 'reflexbox'
 
 interface PositionCellProps {
   positions: Position[]
-  teams: TeamPreview[]
+  teams: TeamPreview[] | null
   onRemovePosition: (positionId: number) => any
   onAddPosition: (teamId: number, level: PositionLevel) => any
 }
@@ -64,7 +64,15 @@ export default class PositionCell extends React.Component<PositionCellProps, Pos
   }
 
   renderAddTeamPopoverContent () {
-    const teamDataSource = this.props.teams.map(v => ({
+    const teams = this.props.teams
+
+    if (teams === null) {
+      return (
+        <div><Spin/> Loading teams...</div>
+      )
+    }
+
+    const teamDataSource = teams.map(v => ({
       text: v.name,
       value: v.id as any
     }))
