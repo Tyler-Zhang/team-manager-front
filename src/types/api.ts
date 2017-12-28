@@ -78,3 +78,11 @@ export interface UserInfo {
   slackTag: string
   googleAuth: boolean
 }
+
+export interface ApiFindQuery<Model> {
+  q?: string
+  pageSize?: number
+  page?: number
+  order?: keyof Model
+  orderDir?: 'ASC' | 'DESC'
+}

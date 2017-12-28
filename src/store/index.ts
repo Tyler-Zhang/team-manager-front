@@ -1,5 +1,6 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { routerReducer, routerMiddleware } from 'react-router-redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import ReduxThunk from 'redux-thunk'
 import createHistory from 'history/createBrowserHistory'
 
@@ -25,5 +26,5 @@ const reducer = combineReducers<RootStore>({
 
 export const store = createStore<RootStore>(
   reducer,
-  applyMiddleware(ReduxThunk, routerMiddleware(history))
+  composeWithDevTools(applyMiddleware(ReduxThunk, routerMiddleware(history)))
 )

@@ -4,14 +4,12 @@ import { connect } from 'react-redux';
 import { Button, Modal } from 'antd'
 import axios from '../../../utils/axios'
 import { RootStore } from '../../../store'
-import { loadUsers } from '../../../store/users'
 import { Authority, TeamPreview } from '../../../types';
 import { API_POST_USERS } from '../../../constants/api';
 
 import AddUserForm from './AddUserForm'
 
 interface AddUserModalProps {
-  loadUsers: () => any,
   teamsPreview: TeamPreview[]
 }
 
@@ -50,6 +48,4 @@ const mapStateToProps = (state: RootStore) => ({
   teamsPreview: state.teams.preview
 })
 
-const mapDispatchToProps = (dispatch: any) => bindActionCreators({ loadUsers }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddUserModal)
+export default connect(mapStateToProps)(AddUserModal)

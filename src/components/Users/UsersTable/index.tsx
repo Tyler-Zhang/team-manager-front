@@ -4,17 +4,20 @@ import { connect } from 'react-redux';
 import { Table, Icon, Divider } from 'antd'
 import * as moment from 'moment'
 import axios from '../../../utils/axios'
-import { loadUsers } from '../../../store/users'
+import { loadUsers, changeQuery } from '../../../store/users'
 import { RootStore } from '../../../store'
-import { User, TeamPreview, PositionLevel } from '../../../types';
+import { User, TeamPreview, PositionLevel, ApiFindQuery } from '../../../types';
 
 import PositionCell from './PositionCell'
 import { API_DELETE_POSITION, API_POST_POSITION } from '../../../constants/api';
 
 interface UsersTableProps {
   users: User[]
+  totalUsers: number
+  query: ApiFindQuery<User>
   teamsPreview: TeamPreview[]
-  loadUsers: typeof loadUsers
+  loadUsers: () => any
+  changeQuery: (query: Partial<ApiFindQuery<User>>) => any
 }
 
 class UsersTable extends React.Component<UsersTableProps, {}> {
@@ -36,8 +39,9 @@ class UsersTable extends React.Component<UsersTableProps, {}> {
       key: 'email',
       dataIndex: 'email'
     }, {
-      title: 'Joined',
-      key: 'joined',
+      title: 'Created',
+      key: 'createDate',
+      dataIndex: 'createDate',      
       render: (text: string) => moment(text).format('MMM Do, YYYY')
     }, {
       title: 'Positions',
@@ -64,17 +68,40 @@ class UsersTable extends React.Component<UsersTableProps, {}> {
   }
   
   render () {
+    const query = this.props.query
     return (
-      <Table dataSource={this.props.users} columns={this.columns} />
+      <Table 
+        dataSource={this.props.users} 
+        columns={this.columns}
+        pagination={{
+          defaultCurrent: 0,
+          current: query.page,
+          pageSize: query.pageSize,
+          onChange: (page: number, pageSize: number) => {
+            this.props.changeQuery({ page, pageSize })
+            this.props.loadUsers()
+          },
+          total: this.props.totalUsers,
+          showTotal: (a, b) => `Showing ${b[0]}-${b[1]} of ${a}`,
+          pageSizeOptions: ['10', '20', '50', '100'],
+          showSizeChanger: true,
+          onShowSizeChange: (current, newVal) => {
+            this.props.changeQuery({ pageSize: newVal })
+            this.props.loadUsers()            
+          }
+        }}
+      />
     )
   }
 }
 
 const mapStateToProps = (state: RootStore) => ({
   users: state.users.users,
-  teamsPreview: state.teams.preview
+  query: state.users.query,
+  teamsPreview: state.teams.preview,
+  totalUsers: state.users.total
 })
 
-const mapDispatchToProps = (dispatch: any) => bindActionCreators({ loadUsers }, dispatch)
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({ loadUsers, changeQuery }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersTable)
