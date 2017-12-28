@@ -6,6 +6,7 @@ import Login from './components/Login'
 
 import Navigation from './components/Navigation'
 import UsersPage from './components/Users'
+import TeamsPage from './components/Teams'
 import Connections from './components/Connections'
 
 import './App.css'
@@ -21,6 +22,7 @@ export default class App extends React.PureComponent {
             <Navigation>
               <Switch>
                 <Route path="/users" exact={true} component={UsersPage} />
+                <Route path="/teams" exact={true} component={TeamsPage} />
                 <Route path="/connections" exact={true} component={Connections} />
               </Switch>
             </Navigation>
