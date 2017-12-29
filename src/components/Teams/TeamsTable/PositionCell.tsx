@@ -142,7 +142,7 @@ render () {
             onClick={() => this.setState({ popoverVisible: true })}
           > 
             <Icon type="plus"/>
-            Add Team
+            Add User
           </a>
           </Tag>
         </Popover>

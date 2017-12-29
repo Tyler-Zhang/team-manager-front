@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Layout, Button, Input, Row, Col } from 'antd'
+import { Layout, Button, Input, Row, Col, Card } from 'antd'
 import { bindActionCreators } from 'redux'
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux'
@@ -7,6 +7,7 @@ import { loadTeams, changeQuery } from '../../store/teams'
 
 import TeamsTable from './TeamsTable'
 import AddTeamModal from './AddTeamModal'
+import TeamActionPanel from './TeamActionPanel'
 import { Flex } from 'reflexbox';
 import { ApiFindQuery, Team } from '../../types/index';
 
@@ -50,7 +51,14 @@ class TeamsPage extends React.Component<TeamsPageProps, {}> {
           </Row>
         </Header>
         <Content>
-          <TeamsTable/>
+          <Row>
+            <Col span={14}>
+              <TeamsTable/>
+            </Col>
+            <Col span={10} style={{ padding: 10 }}>
+              <TeamActionPanel/>
+            </Col>
+          </Row>
         </Content>
       </Layout>
     )

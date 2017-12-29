@@ -9,6 +9,7 @@ const CHANGE_LOAD_STATE = 'team-manager/team/CHANGE_LOAD_STATE'
 const LOAD_TEAMS = 'team-manager/team/LOAD_TEAMS'
 const LOAD_TEAMS_PREVIEW = 'team-manager/team/LOAD_TEAMS_PREVIEW'
 const CHANGE_QUERY = 'team-manager/team/CHANGE_QUERY'
+const FOCUS_TEAM = 'team-manager/team/FOCUS_TEAM'
 
 // Action Creators
 
@@ -29,6 +30,10 @@ export function loadTeamPreview () {
   }
 }
 
+export function focusTeam (teamId: number) {
+  return { type: FOCUS_TEAM, teamId }
+}
+
 export function changeQuery (query: Partial<ApiFindQuery<Team>>) {
   return { type: CHANGE_QUERY, query }
 }
@@ -36,6 +41,7 @@ export function changeQuery (query: Partial<ApiFindQuery<Team>>) {
 // Default State + Reducers
 export interface TeamStore {
   teams: Team[] | null
+  selected: number | null
   preview: TeamPreview[] | null
   total: number | null
   query: ApiFindQuery<Team>
@@ -43,6 +49,7 @@ export interface TeamStore {
 
 const defaultState: TeamStore = {
   teams: null,
+  selected: null,
   preview: null,
   total: null,
   query: { page: 0, pageSize: 50 }
@@ -56,6 +63,8 @@ export default (state: TeamStore = defaultState, action: ReduxAction): TeamStore
       return { ...state, preview: action.teamsPreview }
     case CHANGE_QUERY:
       return { ...state, query: { ...state.query, ...action.query } }
+    case FOCUS_TEAM:
+      return { ...state, selected: action.teamId }
     default: return state
   }
 }

@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { bindActionCreators, ActionCreator } from 'redux';
 import { connect } from 'react-redux';
-import { Table, Icon, Divider } from 'antd'
+import { Table, Icon, Divider, Button } from 'antd'
 import * as moment from 'moment'
 import axios from '../../../utils/axios'
-import { loadTeams, changeQuery } from '../../../store/teams'
+import { loadTeams, changeQuery, focusTeam } from '../../../store/teams'
 import { RootStore } from '../../../store'
 import { PositionLevel, ApiFindQuery, Team, UserPreview } from '../../../types';
 
@@ -18,6 +18,7 @@ interface TeamsTableProps {
   usersPreview: UserPreview[]
   loadTeams: () => any
   changeQuery: (query: Partial<ApiFindQuery<Team>>) => any
+  focusTeam: (teamId: number) => any
 }
 
 class TeamsTable extends React.Component<TeamsTableProps, {}> {
@@ -27,15 +28,28 @@ class TeamsTable extends React.Component<TeamsTableProps, {}> {
     super(props)
 
     this.columns = [{
+      title: '',
+      key: 'view',
+      render: (_: any, team: Team) => (
+        <Button
+          icon="eye"
+          onClick={() => this.props.focusTeam(team.id)}
+          type="ghost"
+        />
+      )
+    }, {
+      width: '15%',
       title: 'Name',
       key: 'name',
       dataIndex: 'name'
     }, {
+      width: '15%',
       title: 'Created',
       key: 'createDate',
       dataIndex: 'createDate',      
       render: (text: string) => moment(text).format('MMM Do, YYYY')
     }, {
+      width: '70%',
       title: 'Positions',
       key: 'positions',
       render: (text: string, team: Team) => (
@@ -49,17 +63,17 @@ class TeamsTable extends React.Component<TeamsTableProps, {}> {
     }]
   }
 
-  onAddUser = (teamId: number) => async (userId: number, level: PositionLevel) => {
+onAddUser = (teamId: number) => async (userId: number, level: PositionLevel) => {
     await axios.post(API_POST_POSITION, { userId, teamId, level })
     this.props.loadTeams()
   }
 
-  onRemovePosition = async (positionId: number) => {
+onRemovePosition = async (positionId: number) => {
     await axios.delete(`${API_DELETE_POSITION}/${positionId}`)
     this.props.loadTeams()
   }
   
-  render () {
+render () {
     const query = this.props.query
     return (
       <Table 
@@ -94,6 +108,6 @@ const mapStateToProps = (state: RootStore) => ({
   totalTeams: state.teams.total
 })
 
-const mapDispatchToProps = (dispatch: any) => bindActionCreators({ loadTeams, changeQuery }, dispatch)
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({ loadTeams, changeQuery, focusTeam }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeamsTable)

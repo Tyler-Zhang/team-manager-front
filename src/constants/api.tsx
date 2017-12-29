@@ -11,3 +11,4 @@ export const API_DELETE_POSITION = '/api/positions'
 export const API_GET_ACCOUNT = '/api/users/me/info'
 export const API_REDIRECT_GOOGLE = '/api/google/redirect'
 export const API_POST_TEAMS = '/api/teams'
+export const API_GET_TEAM_BY_ID = (teamId: number | string) => `/api/teams/${teamId}`

@@ -1,4 +1,5 @@
 export * from './api'
+export * from './google-drive'
 
 export enum LoadState {
   beforeLoad,
