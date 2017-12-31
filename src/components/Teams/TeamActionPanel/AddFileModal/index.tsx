@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Modal, Button, Table, Input, Row, Col } from 'antd'
+import { Modal, Button, Table, Input, Row, Col, Radio } from 'antd'
 import * as loadScript from 'load-script'
-import { GoogleDriveFile } from '../../../types'
+import { GoogleDriveFile, FilePermission } from '../../../../types'
 
 const DEVELOPER_KEY = 'AIzaSyC8k6XKgRBivYcjpulZnU5St6XfdzozbnI'
 const CLIENT_ID = '943913171833-no91vjd6embk8ne274pl6qpc8423n8qd.apps.googleusercontent.com'
@@ -11,7 +11,7 @@ let scriptLoadingStarted = false
 
 export interface PickedInfo {
   token: string
-  docs: GoogleDriveFile[]
+  doc: GoogleDriveFile
 }
 
 interface AddFileModalProps {
@@ -19,15 +19,20 @@ interface AddFileModalProps {
   title?: string
   oauthToken?: string
   onSelect: (pickedInfo: PickedInfo) => any
+  getAuthToken?: () => Promise<string> | string
 }
 
 interface AddFileModalState {
   visible: boolean
+  level: FilePermission
+  doc: GoogleDriveFile | null
 }
 
 export default class AddFileModal extends React.Component<AddFileModalProps, AddFileModalState> {
   state = {
     visible: false,
+    level: FilePermission.reader,
+    doc: null
   }
 
   private oauthToken: string
@@ -94,25 +99,32 @@ export default class AddFileModal extends React.Component<AddFileModalProps, Add
 
   pickerCallBack = (data: any) => {
     if (data.action === 'picked') {
-      const info: PickedInfo = {
-        token: this.oauthToken,
-        docs: data.docs
-      }
-
-      this.props.onSelect(info)
+      this.setState({ doc: data.docs[0], visible: true })
     }
   }
 
-  onLaunch = () => {
-    if (!this.props.oauthToken) {
+  onLaunch = async () => {
+    if (this.props.oauthToken) {
+      this.oauthToken = this.props.oauthToken
+      this.createPicker()
+    } else if (this.props.getAuthToken) {
+      const maybePromise = this.props.getAuthToken()
+      let token
+
+      if (typeof maybePromise === 'string') { 
+        token = maybePromise 
+      } else { 
+        token = await maybePromise 
+      }
+
+      this.oauthToken = token
+      this.createPicker()
+    } else {
       // Have to authenticate ourselves
       this.authenticate((data: any) => {
         this.oauthToken = data.access_token
         this.createPicker()
       })
-    } else {
-      this.oauthToken = this.props.oauthToken
-      this.createPicker()
     }
   }
 
@@ -125,6 +137,22 @@ export default class AddFileModal extends React.Component<AddFileModalProps, Add
           disabled={this.props.disabled}
         > Go
         </Button>
+        <Modal
+          visible={this.state.visible}
+          onCancel={() => this.setState({ visible: false, doc: null })}
+        >
+          <br/>
+          <h2>Are you sure you want to transfer this file?</h2>
+          <br/>
+          <h4>Filename: {this.state.doc !== null ? (this.state.doc as any).name : ''}</h4>
+          <Radio.Group 
+            onChange={val => this.setState({ level: (val.target.value as any) })}
+            value={this.state.level}
+          >
+            <Radio.Button value={FilePermission.reader}>Reader</Radio.Button>
+            <Radio.Button value={FilePermission.writer}>Writer</Radio.Button>
+          </Radio.Group>
+        </Modal>
       </div>
     )
   }

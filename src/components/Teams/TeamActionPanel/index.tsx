@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Flex } from 'reflexbox';
 import { ApiFindQuery, Team, UserInfo, Authority } from '../../../types/index';
 import { RootStore } from '../../../store/index';
-import { API_GET_TEAM_BY_ID } from '../../../constants/api'
+import { API_GET_TEAM_BY_ID, API_GET_ADMIN_GOOGLE_TOKEN, API_GET_GOOGLE_TOKEN } from '../../../constants/api'
 import axios from '../../../utils/axios'
 
 import AddFileModal, { PickedInfo } from './AddFileModal'
@@ -39,6 +39,24 @@ class TeamActionPanel extends React.Component<TeamActionPanelProps, TeamActionPa
     }
   }
 
+  async getAdminToken () {
+    try {
+      const response = await axios.get(API_GET_ADMIN_GOOGLE_TOKEN)
+      return response.data.token
+    } catch (e) {
+      message.error(e.message)
+    }
+  }
+
+  async getUserToken () {
+    try {
+      const response = await axios.get(API_GET_GOOGLE_TOKEN)
+      return response.data.token
+    } catch (e) {
+      message.error(e.message)
+    }
+  }
+
   onFilesSelected = (info: PickedInfo) => {
     console.log('selected', info)
   }
@@ -66,8 +84,11 @@ class TeamActionPanel extends React.Component<TeamActionPanelProps, TeamActionPa
       <Card bordered={true}>
         <Row><h1>{team.name}</h1></Row>
         <Divider> Files </Divider>
+        <Row>
+          <h4>Add files with one of the following options:</h4>
+        </Row>
         <Row type="flex">
-          <Col span={10} offset={1}>
+          <Col span={11}>
             <Card type="inner" title="Personal Google Drive" style={{height: '100%'}}>
               Add File from your personal google drive account
               <br/>
@@ -85,10 +106,11 @@ class TeamActionPanel extends React.Component<TeamActionPanelProps, TeamActionPa
                 title="Add file from personal drive"
                 disabled={!this.props.account.googleAuth}
                 onSelect={this.onFilesSelected}
+                getAuthToken={this.getUserToken}
               />
             </Card>
           </Col>
-          <Col span={10} offset={2}>
+          <Col span={11} offset={2}>
           <Card type="inner" title="Team account" style={{height: '100%'}}>
               Add file from the team manager account
               <br/>
@@ -104,6 +126,7 @@ class TeamActionPanel extends React.Component<TeamActionPanelProps, TeamActionPa
                 title="Add file from Team-manager drive"
                 disabled={this.props.account.authority !== Authority.admin}
                 onSelect={this.onFilesSelected}
+                getAuthToken={this.getAdminToken}
               />
             </Card>
           </Col>
