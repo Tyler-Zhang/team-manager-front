@@ -11,10 +11,10 @@ export enum PositionLevel {
 }
 
 export enum FilePermission {
-  none,
-  reader,
-  writer,
-  owner
+  none = 'none',
+  reader = 'reader',
+  writer = 'writer',
+  owner = 'owner'
 }
 
 export interface TeamPreview {

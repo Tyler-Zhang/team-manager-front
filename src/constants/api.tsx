@@ -14,3 +14,4 @@ export const API_POST_TEAMS = '/api/teams'
 export const API_GET_TEAM_BY_ID = (teamId: number | string) => `/api/teams/${teamId}`
 export const API_GET_ADMIN_GOOGLE_TOKEN = '/api/google/token/admin'
 export const API_GET_GOOGLE_TOKEN = '/api/google/token'
+export const API_POST_TEAM_FILE = (teamId: number | string) => `/api/teams/${teamId}/files`

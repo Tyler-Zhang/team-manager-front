@@ -12,27 +12,30 @@ let scriptLoadingStarted = false
 export interface PickedInfo {
   token: string
   doc: GoogleDriveFile
+  permission: FilePermission
 }
 
 interface AddFileModalProps {
   disabled: boolean
   title?: string
   oauthToken?: string
-  onSelect: (pickedInfo: PickedInfo) => any
+  onSelect: (pickedInfo: PickedInfo) => Promise<any>
   getAuthToken?: () => Promise<string> | string
 }
 
 interface AddFileModalState {
   visible: boolean
-  level: FilePermission
+  permission: FilePermission
   doc: GoogleDriveFile | null
+  loading: boolean  
 }
 
 export default class AddFileModal extends React.Component<AddFileModalProps, AddFileModalState> {
   state = {
     visible: false,
-    level: FilePermission.reader,
-    doc: null
+    permission: FilePermission.reader,
+    doc: null,
+    loading: false
   }
 
   private oauthToken: string
@@ -128,6 +131,19 @@ export default class AddFileModal extends React.Component<AddFileModalProps, Add
     }
   }
 
+  onConfirm = () => {
+    const { doc, permission } = this.state
+    const token = this.oauthToken
+
+    if (!doc || !permission || !token) { return }
+
+    this.setState({ loading: true })
+
+    this.props.onSelect({ doc, permission, token })
+      .then(() => this.setState({ loading: false, visible: false }))
+      .catch(() => this.setState({ loading: false }))
+  }
+
   render () {
     return (
       <div>
@@ -140,17 +156,19 @@ export default class AddFileModal extends React.Component<AddFileModalProps, Add
         <Modal
           visible={this.state.visible}
           onCancel={() => this.setState({ visible: false, doc: null })}
+          onOk={this.onConfirm}
+          confirmLoading={this.state.loading}
         >
           <br/>
           <h2>Are you sure you want to transfer this file?</h2>
           <br/>
           <h4>Filename: {this.state.doc !== null ? (this.state.doc as any).name : ''}</h4>
           <Radio.Group 
-            onChange={val => this.setState({ level: (val.target.value as any) })}
-            value={this.state.level}
+            onChange={val => this.setState({ permission: (val.target.value as any) })}
+            value={this.state.permission}
           >
-            <Radio.Button value={FilePermission.reader}>Reader</Radio.Button>
-            <Radio.Button value={FilePermission.writer}>Writer</Radio.Button>
+            <Radio.Button value={FilePermission.reader}>{FilePermission.reader}</Radio.Button>
+            <Radio.Button value={FilePermission.writer}>{FilePermission.writer}</Radio.Button>
           </Radio.Group>
         </Modal>
       </div>
