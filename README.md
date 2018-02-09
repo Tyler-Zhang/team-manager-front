@@ -2,8 +2,8 @@
 
 [![Build Status][build-badge]][build]
 
-[build]: https://travis-ci.org/teamwaterloop/team-manager-front
-[build-badge]: https://travis-ci.org/teamwaterloop/team-manager-front.svg?branch=master
+[build]: https://travis-ci.org/waterloop/team-manager-front
+[build-badge]: https://travis-ci.org/waterloop/team-manager-front.svg?branch=master
 
 Frontend Webapp for managing Waterloop team members
 
