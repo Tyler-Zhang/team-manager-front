@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Layout, Button, Input, Row, Col } from 'antd'
 import { bindActionCreators } from 'redux'
-import { Dispatch } from 'redux';
+import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { loadUsers, changeQuery } from '../../store/users'
 
