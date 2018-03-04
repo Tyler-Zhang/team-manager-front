@@ -16,6 +16,7 @@ import {
 import axios from '../../../../utils/axios'
 
 import AddFileModal, { PickedInfo } from './AddFileModal'
+import TeamFiles from './TeamFiles'
 
 const { Header, Footer, Sider, Content } = Layout
 
@@ -78,50 +79,55 @@ class FileSection extends React.Component<FileSectionProps, {} > {
     if (!account || !team) { return '' }
 
     return (
-      <Row type="flex">
-        <Col span={11}>
-          <Card type="inner" title="Personal Google Drive" style={{height: '100%'}}>
-            Add File from your personal google drive account
-            <br/>
-            <br/>
-            <b>The file ownership will be transfered to team-manager</b>
-            <br/>
-            {
-              account.googleAuth ?
-              ''
-              :
-              <Alert type="error" message="You must be logged in with google"/>
-            }
-            <br/>
-            <AddFileModal 
-              title="Add file from personal drive"
-              disabled={!account.googleAuth}
-              onSelect={this.onFilesSelected}
-              getAuthToken={this.getUserToken}
-            />
-          </Card>
-        </Col>
-        <Col span={11} offset={2}>
-        <Card type="inner" title="Team account" style={{height: '100%'}}>
-            Add file from the team manager account
-            <br/>
-            <br/>
-            {
-              account.authority === Authority.admin ?
-              ''
-              :
-              <Alert type="error" message="You must be an admin to do this"/>
-            }
-            <br/>
-            <AddFileModal
-              title="Add file from Team-manager drive"
-              disabled={account.authority !== Authority.admin}
-              onSelect={this.onFilesSelected}
-              getAuthToken={this.getAdminToken}
-            />
-          </Card>
-        </Col>
-      </Row>
+      <div>
+        <Row type="flex">
+          <Col span={11}>
+            <Card type="inner" title="Personal Google Drive" style={{height: '100%'}}>
+              Add File from your personal google drive account
+              <br/>
+              <br/>
+              <b>The file ownership will be transfered to team-manager</b>
+              <br/>
+              {
+                account.googleAuth ?
+                ''
+                :
+                <Alert type="error" message="You must be logged in with google"/>
+              }
+              <br/>
+              <AddFileModal 
+                title="Add file from personal drive"
+                disabled={!account.googleAuth}
+                onSelect={this.onFilesSelected}
+                getAuthToken={this.getUserToken}
+              />
+            </Card>
+          </Col>
+          <Col span={11} offset={2}>
+          <Card type="inner" title="Team account" style={{height: '100%'}}>
+              Add file from the team manager account
+              <br/>
+              <br/>
+              {
+                account.authority === Authority.admin ?
+                ''
+                :
+                <Alert type="error" message="You must be an admin to do this"/>
+              }
+              <br/>
+              <AddFileModal
+                title="Add file from Team-manager drive"
+                disabled={account.authority !== Authority.admin}
+                onSelect={this.onFilesSelected}
+                getAuthToken={this.getAdminToken}
+              />
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <TeamFiles files={this.props.team == null ? null : this.props.team.files}/>
+        </Row>
+      </div>
     )
   }
 }

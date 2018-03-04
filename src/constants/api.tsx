@@ -15,3 +15,4 @@ export const API_GET_TEAM_BY_ID = (teamId: number | string) => `/api/teams/${tea
 export const API_GET_ADMIN_GOOGLE_TOKEN = '/api/google/token/admin'
 export const API_GET_GOOGLE_TOKEN = '/api/google/token'
 export const API_POST_TEAM_FILE = (teamId: number | string) => `/api/teams/${teamId}/files`
+export const API_GET_FILE_INFO = (fileId: string) => `/api/google/file/${fileId}`
